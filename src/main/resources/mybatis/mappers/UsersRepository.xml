@@ -6,13 +6,15 @@
         <result column="USERNAME" jdbcType="VARCHAR" property="username"/>
         <result column="EMAIL" jdbcType="VARCHAR" property="email"/>
         <result column="PASSWORD" jdbcType="VARCHAR" property="password"/>
+        <result column="PERMISSION_LEVEL" jdbcType="DECIMAL" property="permissionLevel"/>
     </resultMap>
 
     <sql id="allColumns">
         USER_ID,
         USERNAME,
         EMAIL,
-        PASSWORD
+        PASSWORD,
+        PERMISSION_LEVEL
     </sql>
 
     <select id="getAll" resultMap="Users">
@@ -21,12 +23,14 @@
         FROM USERS
     </select>
 
-    <select id="findOneByEmail" resultMap="Users">
+    <select id="findOneByEmailOrUsername" resultMap="Users">
         SELECT
             <include refid="allColumns"/>
         FROM USERS
         <where>
-            EMAIL = #{email}
+            EMAIL = #{username}
+            OR
+            USERNAME = #{username}
         </where>
     </select>
 </mapper>

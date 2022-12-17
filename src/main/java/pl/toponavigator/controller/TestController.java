@@ -2,11 +2,9 @@ package pl.toponavigator.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 import pl.toponavigator.repository.UsersRepository;
 
 @RestController
@@ -16,9 +14,30 @@ import pl.toponavigator.repository.UsersRepository;
 public class TestController {
     UsersRepository usersRepository;
 
-    @GetMapping(path = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public String test() {
-        return "XDDD";
+    @GetMapping
+    public String test(@RequestHeader("Authorization") final String bearerToken) {
+        log.error(bearerToken);
+//        log.error(SecurityContextHolder.getContext().toString());
+//        final UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        log.error(userDetails.getUsername());
+//        log.error(userDetails.getAuthorities().toString());
+        return "test";
+    }
+
+    @GetMapping("user")
+    public String test1() {
+//        final UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        log.error(userDetails.getUsername());
+//        log.error(userDetails.getAuthorities().toString());
+        return "user";
+    }
+
+    @GetMapping("admin")
+    public String test2() {
+        final UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        log.error(userDetails.getUsername());
+        log.error(userDetails.getAuthorities().toString());
+        return "admin";
     }
 
     @Autowired

@@ -4,8 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.toponavigator.utils.RoleEnum;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Builder
@@ -13,8 +16,10 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class User implements Serializable {
     private static final long serialVersionUID = -7798618983344962426L;
-    private Integer userId;
+    private Set<RoleEnum> roles = new HashSet<>();
+    private Long userId;
     private String username;
     private String email;
     private String password;
+    private Integer permissionLevel;
 }

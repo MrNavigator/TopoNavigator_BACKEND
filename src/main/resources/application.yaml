@@ -1,11 +1,8 @@
-jwt:
-  secret: SECRET_KEY
 logging:
   level:
     root: info
     pl.toponavigator: debug
     org.springframework.web.filter.CommonsRequestLoggingFilter: debug
-
 spring:
   application:
     name: TopoNavigatorAPI
@@ -16,8 +13,8 @@ spring:
     username: postgres
     password:
     driver-class-name: org.postgresql.Driver
-  autoconfigure:
-    exclude:
-      org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+#  autoconfigure:
+#    exclude:
+#      org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
 mybatis:
   mapperLocations: classpath:/mybatis/mappers/*.xml

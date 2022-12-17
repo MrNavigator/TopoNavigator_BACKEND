@@ -13,5 +13,5 @@ import java.util.Optional;
 public interface UsersRepository {
     List<User> getAll();
 
-    Optional<User> findOneByEmail(@Param("email") String email);
+    Optional<User> findOneByEmailOrUsername(@Param("username") String username);
 }
