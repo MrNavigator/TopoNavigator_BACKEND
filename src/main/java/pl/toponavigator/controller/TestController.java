@@ -4,7 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import pl.toponavigator.repository.UsersRepository;
 
 @RestController
@@ -14,9 +17,9 @@ import pl.toponavigator.repository.UsersRepository;
 public class TestController {
     UsersRepository usersRepository;
 
-    @GetMapping
-    public String test(@RequestHeader("Authorization") final String bearerToken) {
-        log.error(bearerToken);
+    @GetMapping("")
+    public String test() {
+//        log.error(bearerToken);
 //        log.error(SecurityContextHolder.getContext().toString());
 //        final UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        log.error(userDetails.getUsername());

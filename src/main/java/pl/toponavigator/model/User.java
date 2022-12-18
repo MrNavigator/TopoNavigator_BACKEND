@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import pl.toponavigator.utils.RoleEnum;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,4 +23,6 @@ public class User implements Serializable {
     private String email;
     private String password;
     private Integer permissionLevel;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 }

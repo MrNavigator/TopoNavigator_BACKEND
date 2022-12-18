@@ -2,6 +2,8 @@ package pl.toponavigator.security;
 
 import com.google.gson.Gson;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,9 +34,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         final String bearerToken = request.getHeader("Authorization");
 
         try {
-            //if valid token set data user from token?
+            //fixme? if valid token set data user from token?
             if (!ObjectUtils.isEmpty(bearerToken) && bearerToken.startsWith("Bearer ")) {
-                final UserDetails userDetails = userDetailsService.loadUserByUsername(JwtUtils.getUsernameFromJwtToken(bearerToken));
+                final UserDetails userDetails = userDetailsService.loadUserByUsername(JwtUtils.getSubjectFromJwtToken(bearerToken, false));
                 final UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
 
@@ -42,20 +44,31 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (final ExpiredJwtException e) {
-            log.error("Cannot set user authentication: " + e);
-            final String errorJson = new Gson().toJson(ErrorResponse.builder()
-                    .type(ErrorTypeEnum.TOKEN_EXPIRED)
-                    .code(HttpStatus.UNAUTHORIZED.value())
-                    .error(e.getMessage())
-                    .build());
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            response.getWriter().write(errorJson);
+            response.getWriter().write(this.createErrorJsonResponseBody(ErrorTypeEnum.ACCESS_TOKEN_EXPIRED, HttpStatus.UNAUTHORIZED, e.getMessage()));
+            return;
+        } catch (final SignatureException e) {
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.getWriter().write(this.createErrorJsonResponseBody(ErrorTypeEnum.SIGNATURE_ERROR, HttpStatus.UNAUTHORIZED, e.getMessage()));
+            return;
+        } catch (final MalformedJwtException e) {
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            response.getWriter().write(this.createErrorJsonResponseBody(ErrorTypeEnum.MALFORMED_JWT_TOKEN, HttpStatus.FORBIDDEN, e.getMessage()));
             return;
         } catch (final Exception e) {
             log.error("Cannot set user authentication: " + e);
-            return;
         }
         filterChain.doFilter(request, response);
+    }
+
+    private String createErrorJsonResponseBody(final ErrorTypeEnum type, final HttpStatus code, final String message) {
+        return new Gson().toJson(
+                ErrorResponse.builder()
+                        .type(type)
+                        .code(code.value())
+                        .error(message)
+                        .build()
+        );
     }
 
     @Autowired

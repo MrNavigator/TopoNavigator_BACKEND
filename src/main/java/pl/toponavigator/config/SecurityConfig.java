@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/test").permitAll()
                         .requestMatchers("/test/admin").hasAnyAuthority(RoleEnum.ADMIN.name())
                         .requestMatchers("/test/user").hasAnyAuthority(RoleEnum.USER.name(), RoleEnum.ADMIN.name())
                         .anyRequest().authenticated())

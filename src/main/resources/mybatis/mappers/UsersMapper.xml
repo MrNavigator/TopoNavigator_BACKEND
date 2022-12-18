@@ -7,6 +7,8 @@
         <result column="EMAIL" jdbcType="VARCHAR" property="email"/>
         <result column="PASSWORD" jdbcType="VARCHAR" property="password"/>
         <result column="PERMISSION_LEVEL" jdbcType="DECIMAL" property="permissionLevel"/>
+        <result column="CREATED_AT" jdbcType="TIMESTAMP" property="createdAt"/>
+        <result column="UPDATED_AT" jdbcType="TIMESTAMP" property="updatedAt"/>
     </resultMap>
 
     <sql id="allColumns">
@@ -14,7 +16,9 @@
         USERNAME,
         EMAIL,
         PASSWORD,
-        PERMISSION_LEVEL
+        PERMISSION_LEVEL,
+        CREATED_AT,
+        UPDATED_AT
     </sql>
 
     <select id="getAll" resultMap="Users">

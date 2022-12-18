@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pl.toponavigator.repository.RefreshTokenRepository">
+    <resultMap id="RefreshToken" type="pl.toponavigator.model.RefreshToken">
+        <result column="REFRESH_TOKEN" jdbcType="VARCHAR" property="refreshToken"/>
+        <result column="USER_ID" jdbcType="DECIMAL" property="userID"/>
+        <result column="CREATION_TIME" jdbcType="TIMESTAMP" property="creationTime"/>
+        <result column="EXPIRATION_TIME" jdbcType="TIMESTAMP" property="expirationTime"/>
+    </resultMap>
+
+    <resultMap id="RefreshTokenSuperset" type="pl.toponavigator.model.supersets.RefreshTokenSuperset">
+        <association property="refreshToken" resultMap="RefreshToken" javaType="pl.toponavigator.model.RefreshToken"/>
+        <association property="user" resultMap="pl.toponavigator.repository.UsersRepository.Users" javaType="pl.toponavigator.model.User"/>
+    </resultMap>
+
+    <sql id="allColumns">
+        REFRESH_TOKEN,
+        USER_ID,
+        CREATION_TIME,
+        EXPIRATION_TIME
+    </sql>
+
+    <select id="getAll" resultMap="RefreshToken">
+        SELECT
+            <include refid="allColumns"/>
+        FROM REFRESH_TOKENS
+    </select>
+
+    <select id="findWithUserByRefreshToken" resultMap="RefreshTokenSuperset">
+        SELECT
+            REFRESH_TOKEN,
+            RT.USER_ID,
+            CREATION_TIME,
+            EXPIRATION_TIME,
+            US.USERNAME
+        FROM REFRESH_TOKENS RT, USERS US
+        <where>
+            REFRESH_TOKEN = #{token}
+            AND
+            RT.USER_ID = US.USER_ID
+        </where>
+    </select>
+
+    <delete id="deleteByUserID">
+        DELETE FROM REFRESH_TOKENS
+        WHERE USER_ID = #{userID};
+    </delete>
+
+    <delete id="deleteByToken">
+        DELETE FROM REFRESH_TOKENS
+        WHERE REFRESH_TOKEN = #{token};
+    </delete>
+
+    <insert id="insert">
+        INSERT INTO REFRESH_TOKENS
+            (REFRESH_TOKEN, USER_ID, CREATION_TIME, EXPIRATION_TIME)
+        VALUES(#{refreshToken.refreshToken}, #{refreshToken.userID}, CURRENT_TIMESTAMP, #{refreshToken.expirationTime});
+    </insert>
+</mapper>
