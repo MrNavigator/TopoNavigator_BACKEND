@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -47,10 +48,16 @@ public class AuthService {
                     userDetails.getUsername(),
                     roles)
             );
+        } catch (final BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatusCode.valueOf(403)).body(ErrorResponse.builder()
+                    .type(ErrorTypeEnum.USER_NOT_FOUND)
+                    .code(HttpStatus.FORBIDDEN.value())
+                    .error(e.getMessage())
+                    .build());
         } catch (final Exception e) {
             return ResponseEntity.status(HttpStatusCode.valueOf(403)).body(ErrorResponse.builder()
                     .type(ErrorTypeEnum.UNDEFINED_ERROR)
-                    .code(HttpStatus.UNAUTHORIZED.value())
+                    .code(HttpStatus.FORBIDDEN.value())
                     .error(e.getMessage())
                     .build());
         }

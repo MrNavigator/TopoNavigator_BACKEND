@@ -30,7 +30,7 @@ public class AuthController {
         } catch (final Exception e) {
             return ResponseEntity.status(HttpStatusCode.valueOf(403)).body(ErrorResponse.builder()
                     .type(ErrorTypeEnum.UNDEFINED_ERROR)
-                    .code(HttpStatus.UNAUTHORIZED.value())
+                    .code(HttpStatus.FORBIDDEN.value())
                     .error(e.getMessage())
                     .build());
         }

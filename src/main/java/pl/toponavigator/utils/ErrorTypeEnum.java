@@ -2,6 +2,7 @@ package pl.toponavigator.utils;
 
 public enum ErrorTypeEnum {
     UNDEFINED_ERROR,
+    USER_NOT_FOUND,
     AUTH_ERROR,
     ACCESS_TOKEN_EXPIRED,
     REFRESH_TOKEN_EXPIRED,
