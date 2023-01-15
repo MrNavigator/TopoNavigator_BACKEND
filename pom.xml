@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>topoNavigator</artifactId>
+    <artifactId>topoNavigator_backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>topoNavigator</name>
     <description>topoNavigator</description>
