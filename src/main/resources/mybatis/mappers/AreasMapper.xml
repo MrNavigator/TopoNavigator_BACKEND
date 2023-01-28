@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pl.toponavigator.repository.AreasRepository">
+    <resultMap id="Area" type="pl.toponavigator.model.Area">
+        <result column="AR_AREA_ID" jdbcType="DECIMAL" property="id"/>
+        <result column="AR_NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="AR_DESCRIPTION" jdbcType="DECIMAL" property="description"/>
+    </resultMap>
+
+    <sql id="allColumns">
+        AR_AREA_ID,
+        AR_NAME,
+        AR_DESCRIPTION
+    </sql>
+
+    <select id="getAll" resultMap="Area">
+        SELECT
+        <include refid="allColumns"/>
+        FROM AREAS
+    </select>
+
+    <!--    <select id="findById" resultMap="Area">-->
+    <!--        SELECT-->
+    <!--        <include refid="allColumns"/>-->
+    <!--        FROM Area-->
+    <!--        <where>-->
+    <!--            EMAIL = #{username}-->
+    <!--            OR-->
+    <!--            USERNAME = #{username}-->
+    <!--        </where>-->
+    <!--    </select>-->
+</mapper>

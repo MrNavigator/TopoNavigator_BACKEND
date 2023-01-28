@@ -11,7 +11,6 @@ import java.util.List;
 public class AreaService {
 
     public ResponseEntity<Object> getAllAreas() {
-        List<Area> areaList =
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

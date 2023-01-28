@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pl.toponavigator.repository.LikedCragsRepository">
+    <resultMap id="LikedCrag" type="pl.toponavigator.model.LikedCrag">
+        <result column="LC_LIKE_ID" jdbcType="DECIMAL" property="likeID"/>
+        <result column="LC_CRAG_ID" jdbcType="VARCHAR" property="cragID"/>
+        <result column="LC_USER_ID" jdbcType="DECIMAL" property="userID"/>
+        <result column="LC_CREATED_AT" jdbcType="TIMESTAMP" property="createdAt"/>
+    </resultMap>
+
+    <resultMap id="LikedCragSuperset" type="pl.toponavigator.model.supersets.LikedCragSuperset">
+        <association property="likedCrag" resultMap="LikedCrag" javaType="pl.toponavigator.model.LikedCrag"/>
+        <association property="crag" resultMap="pl.toponavigator.repository.CragsRepository.Crag"
+                     javaType="pl.toponavigator.model.Crag"/>
+        <association property="area" resultMap="pl.toponavigator.repository.AreasRepository.Area"
+                     javaType="pl.toponavigator.model.Area"/>
+    </resultMap>
+
+    <sql id="allColumns">
+        LC_LIKE_ID,
+        LC_CRAG_ID,
+        LC_USER_ID,
+        LC_CREATED_AT
+    </sql>
+
+    <select id="getAll" resultMap="LikedCrag">
+        SELECT
+        <include refid="allColumns"/>
+        FROM LIKED_CRAGS
+    </select>
+
+    <select id="findByCragIDAndUserID" resultMap="LikedCrag">
+        SELECT
+        <include refid="allColumns"/>
+        FROM LIKED_CRAGS
+        <where>
+            LC_CRAG_ID = #{likeID}
+            AND LC_USER_ID = #{userID}
+        </where>
+    </select>
+
+    <select id="findWithCragsAndAreasByUserID" resultMap="LikedCragSuperset">
+        SELECT
+        LC_LIKE_ID,
+        LC_CRAG_ID,
+        LC_USER_ID,
+        CR_NAME,
+        CR_AREA_ID,
+        AR_AREA_ID,
+        AR_NAME
+        FROM LIKED_CRAGS, CRAGS, AREAS
+        <where>
+            LC_USER_ID = #{userID}
+            AND LC_CRAG_ID = CR_CRAG_ID
+            AND CR_AREA_ID = AR_AREA_ID
+        </where>
+    </select>
+
+    <insert id="save" parameterType="pl.toponavigator.model.LikedCrag" useGeneratedKeys="true" keyProperty="likeID">
+        INSERT INTO LIKED_CRAGS (lc_crag_id, lc_user_id)
+        VALUES (#{cragID}, #{userID})
+    </insert>
+
+    <delete id="deleteByCragIDAndUserID">
+        DELETE FROM LIKED_CRAGS
+        <where>
+            LC_USER_ID = #{userID}
+            AND LC_CRAG_ID = #{cragID}
+        </where>
+    </delete>
+</mapper>

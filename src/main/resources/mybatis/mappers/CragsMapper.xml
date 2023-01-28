@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pl.toponavigator.repository.CragsRepository">
+    <resultMap id="Crag" type="pl.toponavigator.model.Crag">
+        <result column="CR_CRAG_ID" jdbcType="DECIMAL" property="cragID"/>
+        <result column="CR_NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="CR_LATITUDE" jdbcType="DECIMAL" property="latitude"/>
+        <result column="CR_LONGITUDE" jdbcType="DECIMAL" property="longitude"/>
+        <result column="CR_DESCRIPTION" jdbcType="VARCHAR" property="description"/>
+        <result column="CR_AREA_ID" jdbcType="DECIMAL" property="areaID"/>
+        <result column="CR_APPROACH" jdbcType="DECIMAL" property="approach"/>
+        <result column="CR_EXPOSURES" jdbcType="VARCHAR" property="exposures"/>
+        <result column="CR_ROCK_TYPE" jdbcType="VARCHAR" property="rockType"/>
+    </resultMap>
+
+    <sql id="allColumns">
+        CR_CRAG_ID,
+        CR_NAME,
+        CR_LATITUDE,
+        CR_LONGITUDE,
+        CR_DESCRIPTION,
+        CR_AREA_ID,
+        CR_APPROACH,
+        CR_EXPOSURES,
+        CR_ROCK_TYPE
+    </sql>
+
+    <select id="getAll" resultMap="Crag">
+        SELECT
+        <include refid="allColumns"/>
+        FROM CRAGS
+    </select>
+
+</mapper>

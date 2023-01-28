@@ -8,6 +8,6 @@ import java.util.List;
 
 @Mapper
 @Repository
-public interface AreaRepository {
+public interface AreasRepository {
     List<Area> getAll();
 }

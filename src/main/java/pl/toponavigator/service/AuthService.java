@@ -32,7 +32,7 @@ public class AuthService {
     public ResponseEntity<Object> signIn(final LoginRequest loginRequest) {
         try {
             final Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername().trim(), loginRequest.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             final UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
             final String jwtToken = JwtUtils.generateAccessToken(userPrincipal);
